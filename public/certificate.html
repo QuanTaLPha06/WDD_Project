@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate - Fitry</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    @media print {
+      .navbar, footer, #certForm, .no-print { display:none; }
+      .certificate { max-width:100%; border:8px double #6c63ff; }
+    }
+    .cert-divider { border:none; border-top:2px dashed var(--primary); margin:20px 0; }
+    .cert-sig { display:flex; justify-content:space-around; margin-top:40px; flex-wrap:wrap; gap:20px; }
+    .cert-sig-box { text-align:center; }
+    .cert-sig-box .line { width:160px; border-top:1px solid #aaa; margin:0 auto 6px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="certificate.html" class="active">Certificate</a></li>
+  </ul>
+</nav>
+
+<section style="padding:40px 20px;">
+  <h2 class="section-title">Generate Your <span>Certificate</span></h2>
+
+  <!-- Form to generate certificate -->
+  <div class="form-wrap" id="certForm">
+    <h3 style="text-align:center; margin-bottom:24px;">Fill in your details</h3>
+
+    <div class="form-group">
+      <label for="certName">Your Full Name</label>
+      <input type="text" id="certName" placeholder="e.g. Kevin Gandhi">
+      <span class="error-msg" id="err-certName">Please enter your name.</span>
+    </div>
+
+    <div class="form-group">
+      <label for="certCourse">Course Completed</label>
+      <select id="certCourse">
+        <option value="">-- Select course --</option>
+        <option value="Web Development with HTML5, CSS3 &amp; JavaScript">Web Development (HTML5, CSS3, JavaScript)</option>
+        <option value="Python Programming Fundamentals">Python Programming</option>
+        <option value="Data Analytics with SQL &amp; Excel">Data Analytics</option>
+        <option value="Node.js &amp; Express API Development">Node.js &amp; Express</option>
+        <option value="Machine Learning Basics">Machine Learning</option>
+      </select>
+      <span class="error-msg" id="err-certCourse">Please select a course.</span>
+    </div>
+
+    <div class="form-group">
+      <label for="certDate">Completion Date</label>
+      <input type="date" id="certDate">
+      <span class="error-msg" id="err-certDate">Please select the completion date.</span>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;" onclick="generateCertificate()">
+      Generate Certificate 🎓
+    </button>
+  </div>
+
+  <!-- Certificate Output (hidden until generated) -->
+  <div id="certOutput" class="hidden">
+    <div class="certificate" id="certBox">
+      <p style="color:var(--muted); font-size:0.85rem; letter-spacing:2px; text-transform:uppercase;">
+        Certificate of Completion
+      </p>
+
+      <hr class="cert-divider">
+
+      <p style="font-size:1.1rem; color:var(--muted);">This is to certify that</p>
+      <h2 style="font-size:2rem; color:var(--dark); margin:12px 0;" id="certOutName"></h2>
+
+      <p style="font-size:1rem; color:var(--muted);">has successfully completed</p>
+      <h3 style="color:var(--primary); font-size:1.4rem; margin:12px 0;" id="certOutCourse"></h3>
+
+      <p style="color:var(--muted);">on the Fitry Learning Platform</p>
+      <p style="margin-top:8px; color:var(--muted);">Date: <strong id="certOutDate"></strong></p>
+
+      <hr class="cert-divider">
+
+      <div class="cert-sig">
+        <div class="cert-sig-box">
+          <div class="line"></div>
+          <p style="font-size:0.85rem; color:var(--muted);">Ms. Nikita Pande</p>
+          <p style="font-size:0.78rem; color:var(--muted);">Course Faculty, NMIMS</p>
+        </div>
+        <div class="cert-sig-box">
+          <div class="line"></div>
+          <p style="font-size:0.85rem; color:var(--muted);">Platform Director</p>
+          <p style="font-size:0.78rem; color:var(--muted);">Fitry Learning</p>
+        </div>
+      </div>
+
+      <p class="cert-id" id="certOutId"></p>
+    </div>
+
+    <div style="text-align:center; margin-top:24px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;"
+         class="no-print">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ Print Certificate</button>
+      <button class="btn btn-secondary" onclick="resetCert()">Generate Another</button>
+      <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<script>
+  function generateCertificate() {
+    var name   = document.getElementById('certName').value.trim();
+    var course = document.getElementById('certCourse').value;
+    var date   = document.getElementById('certDate').value;
+    var valid  = true;
+
+    // Validations
+    if (!name) { toggleErr('err-certName', true);   valid = false; } else { toggleErr('err-certName', false); }
+    if (!course){ toggleErr('err-certCourse', true); valid = false; } else { toggleErr('err-certCourse', false); }
+    if (!date)  { toggleErr('err-certDate', true);   valid = false; } else { toggleErr('err-certDate', false); }
+
+    if (!valid) return;
+
+    // Generate unique certificate ID using Math.random() (from course)
+    var certId = 'FTR-' + Math.floor(Math.random() * 900000 + 100000);
+
+    // Format date
+    var d = new Date(date);
+    var months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+    var formattedDate = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+    // Update certificate DOM
+    document.getElementById('certOutName').textContent   = name;
+    document.getElementById('certOutCourse').innerHTML   = course;
+    document.getElementById('certOutDate').textContent   = formattedDate;
+    document.getElementById('certOutId').textContent     = 'Certificate ID: ' + certId;
+
+    // Show certificate, hide form
+    document.getElementById('certForm').classList.add('hidden');
+    document.getElementById('certOutput').classList.remove('hidden');
+  }
+
+  function resetCert() {
+    document.getElementById('certForm').classList.remove('hidden');
+    document.getElementById('certOutput').classList.add('hidden');
+    document.getElementById('certName').value = '';
+    document.getElementById('certCourse').value = '';
+    document.getElementById('certDate').value = '';
+  }
+
+  function toggleErr(id, show) {
+    var el = document.getElementById(id);
+    if (show) el.classList.add('show'); else el.classList.remove('show');
+  }
+</script>
+</body>
+</html>

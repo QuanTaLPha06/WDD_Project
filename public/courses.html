@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Fitry</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .course-card { background:var(--white); border-radius:var(--radius); padding:28px; width:300px; box-shadow:var(--shadow); border-top:4px solid var(--primary); transition:var(--transition); position:relative; }
+    .course-card:hover { transform:translateY(-8px); box-shadow:0 12px 32px rgba(108,99,255,0.25); }
+    .course-card h3 { margin-bottom:12px; }
+    .course-card ul { list-style-type:disc; padding-left:20px; color:var(--muted); font-size:0.9rem; line-height:2; }
+    .level-badge { padding:4px 12px; border-radius:20px; font-size:0.78rem; font-weight:700; }
+    .level-beg  { background:#d4edda; color:#155724; }
+    .level-int  { background:#fff3cd; color:#856404; }
+    .level-adv  { background:#f8d7da; color:#721c24; }
+    .course-card[data-track] { display:flex; flex-direction:column; gap:10px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="career.html">Career Guide</a></li>
+    <li><a href="jobs.html">Jobs</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+
+<section>
+
+  <!-- DYNAMIC RECOMMENDATION BANNER FROM QUIZ -->
+  <div id="courseAssessmentBanner" class="guide-assessment-banner" style="display:none; margin-bottom:28px;">
+    <div>
+      <span class="banner-pill">🎯 Quiz Recommendation Active</span>
+      <h3 id="courseBannerTitle">Recommended Starting Course: HTML &amp; CSS Fundamentals</h3>
+      <p id="courseBannerDesc">Matched based on your career diagnostic quiz results.</p>
+    </div>
+    <div class="banner-cta">
+      <a href="career.html" class="btn btn-secondary" style="background:rgba(255,255,255,0.18); color:#fff; border-color:transparent;">
+        ← Back to Career Guide
+      </a>
+      <a href="dashboard.html" class="btn btn-primary" style="background:var(--accent); border-color:var(--accent);">
+        Go to Dashboard →
+      </a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Browse <span>Courses</span></h2>
+  <p style="text-align:center; color:var(--muted); margin-bottom:30px;">
+    Filter by track to find the right course for your career goal.
+  </p>
+
+  <!-- Filter Buttons — JS onclick to show/hide cards -->
+  <div class="filter-btns">
+    <button class="filter-btn active" id="filter-all"  onclick="filterCourses('all',  this)">All</button>
+    <button class="filter-btn"        id="filter-web"  onclick="filterCourses('web',  this)">Web Dev</button>
+    <button class="filter-btn"        id="filter-py"   onclick="filterCourses('py',   this)">Python</button>
+    <button class="filter-btn"        id="filter-data" onclick="filterCourses('data', this)">Data</button>
+    <button class="filter-btn"        id="filter-ml"   onclick="filterCourses('ml',   this)">ML</button>
+  </div>
+
+  <!-- Course Cards — data-track used for JS filtering -->
+  <div class="cards-grid" id="courseGrid">
+
+    <div class="course-card" data-track="web" data-title="HTML & CSS Fundamentals">
+      <span class="level-badge level-beg">Beginner</span>
+      <h3>HTML &amp; CSS Fundamentals</h3>
+      <ul>
+        <li>HTML5 Semantic Tags</li>
+        <li>CSS Box Model</li>
+        <li>Flexbox &amp; Grid</li>
+        <li>Responsive Design</li>
+      </ul>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span class="tag">15 Lessons</span>
+        <span class="tag">+150 XP</span>
+      </div>
+      <button onclick="startCourse('HTML & CSS Fundamentals', 'web')" class="btn btn-primary" style="margin-top:12px; width:100%;">
+        Start Course
+      </button>
+    </div>
+
+    <div class="course-card" data-track="web" data-title="JavaScript DOM & Events">
+      <span class="level-badge level-int">Intermediate</span>
+      <h3>JavaScript DOM &amp; Events</h3>
+      <ul>
+        <li>Functions &amp; Arrays</li>
+        <li>DOM Manipulation</li>
+        <li>Event Listeners</li>
+        <li>Form Validation</li>
+      </ul>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span class="tag">18 Lessons</span>
+        <span class="tag">+200 XP</span>
+      </div>
+      <button onclick="startCourse('JavaScript DOM & Events', 'web')" class="btn btn-primary" style="margin-top:12px; width:100%;">
+        Start Course
+      </button>
+    </div>
+
+    <div class="course-card" data-track="web" data-title="Node.js & Express APIs">
+      <span class="level-badge level-adv">Advanced</span>
+      <h3>Node.js &amp; Express APIs</h3>
+      <ul>
+        <li>Node.js Core Modules</li>
+        <li>Express Setup</li>
+        <li>RESTful CRUD APIs</li>
+        <li>Serving Static Files</li>
+      </ul>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span class="tag">20 Lessons</span>
+        <span class="tag">+250 XP</span>
+      </div>
+      <button onclick="startCourse('Node.js & Express APIs', 'web')" class="btn btn-primary" style="margin-top:12px; width:100%;">
+        Start Course
+      </button>
+    </div>
+
+    <div class="course-card" data-track="py" data-title="Python Basics">
+      <span class="level-badge level-beg">Beginner</span>
+      <h3>Python Basics</h3>
+      <ul>
+        <li>Variables &amp; Data Types</li>
+        <li>Loops &amp; Functions</li>
+        <li>Lists &amp; Dictionaries</li>
+        <li>File Handling</li>
+      </ul>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span class="tag">16 Lessons</span>
+        <span class="tag">+160 XP</span>
+      </div>
+      <button onclick="startCourse('Python Basics', 'py')" class="btn btn-primary" style="margin-top:12px; width:100%;">
+        Start Course
+      </button>
+    </div>
+
+    <div class="course-card" data-track="data" data-title="Data Analytics Intro">
+      <span class="level-badge level-beg">Beginner</span>
+      <h3>Data Analytics Intro</h3>
+      <ul>
+        <li>SQL Basics</li>
+        <li>Excel for Data</li>
+        <li>Charts &amp; Graphs</li>
+        <li>Data Cleaning</li>
+      </ul>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span class="tag">14 Lessons</span>
+        <span class="tag">+140 XP</span>
+      </div>
+      <button onclick="startCourse('Data Analytics Intro', 'data')" class="btn btn-primary" style="margin-top:12px; width:100%;">
+        Start Course
+      </button>
+    </div>
+
+    <div class="course-card" data-track="ml" data-title="Machine Learning Basics">
+      <span class="level-badge level-adv">Advanced</span>
+      <h3>Machine Learning Basics</h3>
+      <ul>
+        <li>Supervised Learning</li>
+        <li>Scikit-learn</li>
+        <li>Model Evaluation</li>
+        <li>Mini Projects</li>
+      </ul>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <span class="tag">22 Lessons</span>
+        <span class="tag">+300 XP</span>
+      </div>
+      <button onclick="startCourse('Machine Learning Basics', 'ml')" class="btn btn-primary" style="margin-top:12px; width:100%;">
+        Start Course
+      </button>
+    </div>
+
+  </div><!-- /cards-grid -->
+
+  <!-- No results message -->
+  <p id="noResults" style="text-align:center; color:var(--muted); display:none; margin-top:20px;">
+    No courses found for this filter.
+  </p>
+
+</section>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<script>
+  // Filter courses by track using JS DOM + loops
+  function filterCourses(track, btn) {
+    // Update active button
+    var buttons = document.querySelectorAll('.filter-btn');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].classList.remove('active');
+    }
+    if (btn) btn.classList.add('active');
+
+    // Show/hide cards
+    var cards   = document.querySelectorAll('.course-card');
+    var visible = 0;
+
+    for (var j = 0; j < cards.length; j++) {
+      if (track === 'all' || cards[j].getAttribute('data-track') === track) {
+        cards[j].style.display = 'flex';
+        visible++;
+      } else {
+        cards[j].style.display = 'none';
+      }
+    }
+
+    document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // ── Start Course Action: enrolls user and moves forward to Dashboard ──
+  function startCourse(courseTitle, trackKey) {
+    var enrollment = {
+      courseTitle: courseTitle,
+      trackKey: trackKey,
+      startedAt: new Date().toISOString(),
+      progressPct: 15
+    };
+    localStorage.setItem('fitry_active_course', JSON.stringify(enrollment));
+
+    // Smooth redirect to Dashboard
+    window.location.href = 'dashboard.html?enrolled=' + encodeURIComponent(courseTitle);
+  }
+
+  // ── Initialization: Check URL and Assessment Result ──
+  window.addEventListener('DOMContentLoaded', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var trackParam = urlParams.get('track');
+    var highlightParam = urlParams.get('highlight');
+
+    var storedAssessment = localStorage.getItem('fitry_assessment');
+    var assessmentData = null;
+    if (storedAssessment) {
+      try {
+        assessmentData = JSON.parse(storedAssessment);
+      } catch(e) {
+        console.error(e);
+      }
+    }
+
+    var recommendedCourse = highlightParam || (assessmentData ? assessmentData.recommendedCourse : null);
+    var targetTrack = trackParam || (assessmentData ? assessmentData.courseTrack : 'all');
+
+    if (recommendedCourse) {
+      // Show top recommendation banner
+      var banner = document.getElementById('courseAssessmentBanner');
+      banner.style.display = 'flex';
+      document.getElementById('courseBannerTitle').textContent = 'Recommended Starting Course: ' + recommendedCourse;
+      if (assessmentData) {
+        document.getElementById('courseBannerDesc').textContent = 'Matched based on your ' + assessmentData.trackTitle + ' assessment with ' + assessmentData.matchScore + '.';
+      }
+
+      // Highlight the matching course card
+      var cards = document.querySelectorAll('.course-card');
+      for (var i = 0; i < cards.length; i++) {
+        var title = cards[i].getAttribute('data-title');
+        if (title && title.toLowerCase() === recommendedCourse.toLowerCase()) {
+          cards[i].classList.add('is-recommended');
+
+          // Prepend glowing ribbon
+          var ribbon = document.createElement('div');
+          ribbon.className = 'recommend-ribbon';
+          ribbon.innerHTML = '⭐ Recommended For You';
+          cards[i].insertBefore(ribbon, cards[i].firstChild);
+
+          // Change button label
+          var btn = cards[i].querySelector('button');
+          if (btn) {
+            btn.textContent = '🚀 Start Recommended Course';
+            btn.style.background = 'var(--accent)';
+            btn.style.borderColor = 'var(--accent)';
+          }
+        }
+      }
+    }
+
+    // Auto-select filter if targetTrack specified
+    if (targetTrack && targetTrack !== 'all') {
+      var btnTarget = document.getElementById('filter-' + targetTrack);
+      if (btnTarget) {
+        filterCourses(targetTrack, btnTarget);
+      } else {
+        filterCourses('all', document.getElementById('filter-all'));
+      }
+    }
+  });
+</script>
+</body>
+</html>

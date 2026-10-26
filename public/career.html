@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Guide - Fitry</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .skill-row td:first-child { font-weight:600; }
+    .gap-yes { color:var(--success); font-weight:700; }
+    .gap-no  { color:var(--danger);  font-weight:700; }
+    .tab-btns { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+    .tab-btn  { padding:10px 22px; border:2px solid var(--primary); border-radius:8px; background:transparent; color:var(--primary); cursor:pointer; font-size:0.9rem; transition:var(--transition); font-weight:600; }
+    .tab-btn.active, .tab-btn:hover { background:var(--primary); color:#fff; }
+    .tab-pane { display:none; }
+    .tab-pane.active { display:block; }
+    
+    .role-pills { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+    .role-pill { padding:8px 18px; border-radius:20px; border:1px solid #ccc; background:#fff; cursor:pointer; font-size:0.88rem; font-weight:600; transition:var(--transition); }
+    .role-pill:hover { border-color:var(--primary); color:var(--primary); }
+    .role-pill.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    .roadmap-container { margin-bottom: 30px; padding: 20px; border-radius: 12px; background: #fff; box-shadow: var(--shadow); }
+    .roadmap-container.highlighted { border: 2px solid var(--primary); background: #fdfdff; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="career.html" class="active">Career Guide</a></li>
+    <li><a href="jobs.html">Jobs</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+
+<section>
+
+  <!-- DYNAMIC QUIZ RESULT BANNER (Generated following quiz completion) -->
+  <div id="assessmentBanner" class="guide-assessment-banner" style="display:none;">
+    <div>
+      <span class="banner-pill" id="bannerBadge">🎯 Quiz Result Applied</span>
+      <h3 id="bannerTitle">Recommended Career Path: Frontend Web Developer</h3>
+      <p id="bannerDesc">
+        Based on your assessment answers, your optimal starting course is <strong id="bannerCourseName">HTML &amp; CSS Fundamentals</strong>. Here is your tailored skill gap analysis and roadmap.
+      </p>
+    </div>
+    <div class="banner-cta">
+      <a id="bannerCourseBtn" href="courses.html?track=web" class="btn btn-primary" style="background:var(--accent); border-color:var(--accent);">
+        Start Recommended Course →
+      </a>
+      <a href="quiz.html?mode=assessment" class="btn btn-secondary">
+        Retake Quiz
+      </a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Career <span>Guide</span></h2>
+
+  <!-- Tab Buttons -->
+  <div class="tab-btns">
+    <button class="tab-btn active" onclick="showTab('skill-gap', this)">Skill Gap Analysis</button>
+    <button class="tab-btn"        onclick="showTab('roadmap',   this)">Learning Roadmap</button>
+    <button class="tab-btn"        onclick="showTab('roles',     this)">Role Descriptions</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 1: Skill Gap Table (rowspan + colspan)                    -->
+  <!-- ============================================================ -->
+  <div class="tab-pane active" id="skill-gap">
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
+      <h3 id="skillGapHeading" style="margin-bottom:6px;">Your Skill Gap — Frontend Developer Role</h3>
+      <span id="roleSourceTag" class="badge badge-done" style="display:none;">Assessed via Quiz</span>
+    </div>
+
+    <!-- Role Filter Pills -->
+    <div class="role-pills">
+      <button class="role-pill active" id="pill-frontend" onclick="changeRoleView('frontend')">🎨 Frontend Developer</button>
+      <button class="role-pill"        id="pill-backend"  onclick="changeRoleView('backend')">⚙️ Backend Developer</button>
+      <button class="role-pill"        id="pill-data"     onclick="changeRoleView('data')">📊 Data Analyst</button>
+      <button class="role-pill"        id="pill-ml"       onclick="changeRoleView('ml')">🧠 Machine Learning</button>
+    </div>
+
+    <p style="color:var(--muted); margin-bottom:20px;">
+      Green (✅ Yes) = skills you have mastered. Red (❌ No) = gap skills to focus on next.
+    </p>
+
+    <!-- Table Container (Dynamically rendered with rowspan & colspan) -->
+    <div id="tableContainer">
+      <table id="skillGapTable">
+        <thead>
+          <tr>
+            <th rowspan="2">Category</th>       <!-- rowspan -->
+            <th colspan="2">Skill Status</th>   <!-- colspan -->
+            <th rowspan="2">Priority</th>
+          </tr>
+          <tr>
+            <th>Skill Name</th>
+            <th>Have It?</th>
+          </tr>
+        </thead>
+        <tbody id="skillTableBody">
+          <!-- Populated by JS based on selected role / quiz result -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary Box using JS -->
+    <div style="background:var(--white); border-radius:var(--radius); padding:20px; margin-top:24px; box-shadow:var(--shadow);">
+      <h4>📊 Skill Readiness Summary</h4>
+      <p style="margin-top:10px; color:var(--muted);">
+        Skills completed: <strong style="color:var(--success);" id="doneCount">6</strong> &nbsp;|&nbsp;
+        Skills missing: <strong style="color:var(--danger);" id="missingCount">4</strong> &nbsp;|&nbsp;
+        Role Readiness: <strong style="color:var(--primary);" id="readinessPct">60%</strong>
+      </p>
+      <div class="xp-bar-wrap" style="margin-top:12px;">
+        <div class="xp-bar" id="readinessBar" style="width:60%;"></div>
+      </div>
+    </div>
+
+    <!-- Next Step Action Callout -->
+    <div style="background:linear-gradient(135deg, #f0efff, #fff); border:1px solid #dcd8fc; border-radius:12px; padding:24px; margin-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div>
+        <h4 style="color:var(--primary); margin-bottom:4px;">Ready to close your skill gaps?</h4>
+        <p style="color:var(--muted); font-size:0.92rem; margin-bottom:0;" id="nextStepText">
+          Start your recommended foundational course: <strong>HTML &amp; CSS Fundamentals</strong>
+        </p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a id="btnNextCourseAction" href="courses.html?track=web" class="btn btn-primary">
+          Start Recommended Course →
+        </a>
+        <a href="dashboard.html" class="btn btn-secondary">
+          Go to Dashboard
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2: Roadmap                                               -->
+  <!-- ============================================================ -->
+  <div class="tab-pane" id="roadmap">
+    
+    <!-- Frontend Roadmap Container -->
+    <div class="roadmap-container" id="rm-frontend">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>🎨 Frontend Developer Roadmap</h3>
+        <span class="badge badge-done tag-match" style="display:none;" id="matchTag-frontend">🎯 Your Assessed Match</span>
+      </div>
+      <div class="roadmap">
+        <div class="roadmap-step done">HTML5<br><small>✅ Done</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step done">CSS3 Flexbox<br><small>✅ Done</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step" style="background:var(--warning); color:#333;">CSS Grid<br><small>⏳ Next</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">JavaScript DOM<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">React.js<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Portfolio<br><small>🔒 Locked</small></div>
+      </div>
+    </div>
+
+    <!-- Backend Developer Roadmap Container -->
+    <div class="roadmap-container" id="rm-backend">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>⚙️ Backend Developer Roadmap</h3>
+        <span class="badge badge-done tag-match" style="display:none;" id="matchTag-backend">🎯 Your Assessed Match</span>
+      </div>
+      <div class="roadmap">
+        <div class="roadmap-step done">JS Basics<br><small>✅ Done</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step" style="background:var(--warning); color:#333;">Node.js Core<br><small>⏳ Next</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Express &amp; APIs<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">SQL &amp; Mongo<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">JWT Auth<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Deployment<br><small>🔒 Locked</small></div>
+      </div>
+    </div>
+
+    <!-- Data Analyst Roadmap Container -->
+    <div class="roadmap-container" id="rm-data">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>📊 Data Analyst Roadmap</h3>
+        <span class="badge badge-done tag-match" style="display:none;" id="matchTag-data">🎯 Your Assessed Match</span>
+      </div>
+      <div class="roadmap">
+        <div class="roadmap-step done">Excel Advanced<br><small>✅ Done</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step" style="background:var(--warning); color:#333;">SQL Queries<br><small>⏳ Next</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Python (Pandas)<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Data Cleaning<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Tableau / BI<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Case Study<br><small>🔒 Locked</small></div>
+      </div>
+    </div>
+
+    <!-- ML Engineer Roadmap Container -->
+    <div class="roadmap-container" id="rm-ml">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3>🧠 Machine Learning Roadmap</h3>
+        <span class="badge badge-done tag-match" style="display:none;" id="matchTag-ml">🎯 Your Assessed Match</span>
+      </div>
+      <div class="roadmap">
+        <div class="roadmap-step done">Python Core<br><small>✅ Done</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step" style="background:var(--warning); color:#333;">NumPy &amp; Math<br><small>⏳ Next</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Scikit-learn<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Supervised ML<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">Neural Nets<br><small>🔒 Locked</small></div>
+        <div class="roadmap-arrow">→</div>
+        <div class="roadmap-step lock">AI Capstone<br><small>🔒 Locked</small></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TAB 3: Role Descriptions using DL tag                        -->
+  <!-- ============================================================ -->
+  <div class="tab-pane" id="roles">
+    <h3 style="margin-bottom:20px;">Tech Role Descriptions</h3>
+    <dl>
+      <dt>Frontend Developer</dt>
+      <dd>Builds what users see and interact with. Works with HTML, CSS, JavaScript, and frameworks like React to create fluid user experiences.</dd>
+
+      <dt>Backend Developer</dt>
+      <dd>Builds server logic, RESTful APIs, and databases. Uses Node.js, Python, or Java to power business logic and high-throughput data transactions.</dd>
+
+      <dt>Full Stack Developer</dt>
+      <dd>Works on both client-side interfaces and backend server architecture. Masters the entire web lifecycle from browser rendering to cloud database storage.</dd>
+
+      <dt>Data Analyst</dt>
+      <dd>Cleans, aggregates, analyses, and visualises data to help organizations make strategic decisions using SQL, Excel, and Python.</dd>
+
+      <dt>Machine Learning Engineer</dt>
+      <dd>Builds, trains, and evaluates intelligent predictive models using Python, Scikit-learn, TensorFlow, or PyTorch.</dd>
+
+      <dt>UI/UX Designer</dt>
+      <dd>Researches user needs, designs interfaces, prototypes user journeys, and ensures digital accessibility using tools like Figma.</dd>
+    </dl>
+
+    <h4 style="margin-top:30px; margin-bottom:12px;">Universal Skills Every Tech Professional Needs:</h4>
+    <ul class="styled-ul">
+      <li>Version Control (Git &amp; GitHub)</li>
+      <li>Command Line / Terminal proficiency</li>
+      <li>Problem-solving &amp; Debugging discipline</li>
+      <li>Technical Documentation &amp; Research skills</li>
+      <li>Cross-functional communication &amp; collaboration</li>
+    </ul>
+  </div>
+
+</section>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<script>
+  // ── Role Data Definitions (Each utilizes HTML table rowspan & colspan) ──
+  var roleData = {
+    frontend: {
+      title: "Frontend Developer",
+      courseTitle: "HTML & CSS Fundamentals",
+      courseUrl: "courses.html?track=web&highlight=HTML%20%26%20CSS%20Fundamentals",
+      doneCount: 6,
+      missingCount: 4,
+      readiness: "60%",
+      rows: [
+        {
+          cat: "HTML & CSS",
+          catColor: "var(--primary)",
+          catBg: "#f0efff",
+          rowspan: 4,
+          skills: [
+            { name: "HTML5 Semantic Tags", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "CSS Flexbox", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "CSS Grid", have: false, badge: "Learn Next", badgeClass: "badge-pending" },
+            { name: "Responsive Design", have: true, badge: "Done", badgeClass: "badge-done" }
+          ]
+        },
+        {
+          cat: "JavaScript",
+          catColor: "var(--accent)",
+          catBg: "#fff3f0",
+          rowspan: 4,
+          skills: [
+            { name: "DOM Manipulation", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "ES6+ (Arrow Fns, Promises)", have: false, badge: "Learn Next", badgeClass: "badge-pending" },
+            { name: "Form Validation", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Fetch API / AJAX", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        },
+        {
+          cat: "Node.js & Tools",
+          catColor: "var(--success)",
+          catBg: "#e8ffe8",
+          rowspan: 3,
+          skills: [
+            { name: "Git Version Control", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Express Static Serving", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "React Components", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        }
+      ]
+    },
+    backend: {
+      title: "Backend Developer",
+      courseTitle: "Node.js & Express APIs",
+      courseUrl: "courses.html?track=web&highlight=Node.js%20%26%20Express%20APIs",
+      doneCount: 5,
+      missingCount: 5,
+      readiness: "50%",
+      rows: [
+        {
+          cat: "Server & Node.js",
+          catColor: "var(--primary)",
+          catBg: "#f0efff",
+          rowspan: 4,
+          skills: [
+            { name: "Node HTTP & URL Modules", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Express Routing & Middleware", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "RESTful CRUD Endpoints", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Async / Await Error Handling", have: false, badge: "Learn Next", badgeClass: "badge-pending" }
+          ]
+        },
+        {
+          cat: "Databases",
+          catColor: "var(--accent)",
+          catBg: "#fff3f0",
+          rowspan: 3,
+          skills: [
+            { name: "SQL Schema Design", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "MongoDB / Mongoose ODM", have: false, badge: "Learn Next", badgeClass: "badge-pending" },
+            { name: "Database Indexing & Queries", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        },
+        {
+          cat: "Security & APIs",
+          catColor: "var(--success)",
+          catBg: "#e8ffe8",
+          rowspan: 3,
+          skills: [
+            { name: "JSON Data Validation", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "JWT Authentication & Hashing", have: false, badge: "Upcoming", badgeClass: "badge-locked" },
+            { name: "API Rate Limiting & CORS", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        }
+      ]
+    },
+    data: {
+      title: "Data Analyst",
+      courseTitle: "Data Analytics Intro",
+      courseUrl: "courses.html?track=data&highlight=Data%20Analytics%20Intro",
+      doneCount: 6,
+      missingCount: 4,
+      readiness: "60%",
+      rows: [
+        {
+          cat: "SQL & Querying",
+          catColor: "var(--primary)",
+          catBg: "#f0efff",
+          rowspan: 3,
+          skills: [
+            { name: "SQL SELECT & WHERE Filters", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "JOINs & Table Aggregations", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Window Functions & Subqueries", have: false, badge: "Learn Next", badgeClass: "badge-pending" }
+          ]
+        },
+        {
+          cat: "Excel & Python",
+          catColor: "var(--accent)",
+          catBg: "#fff3f0",
+          rowspan: 4,
+          skills: [
+            { name: "Pivot Tables & VLOOKUP", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Data Cleaning Techniques", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Python Pandas DataFrames", have: false, badge: "Learn Next", badgeClass: "badge-pending" },
+            { name: "NumPy Statistical Array Math", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        },
+        {
+          cat: "BI & Dashboards",
+          catColor: "var(--success)",
+          catBg: "#e8ffe8",
+          rowspan: 3,
+          skills: [
+            { name: "Chart Selection & Storytelling", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "PowerBI / Tableau Dashboards", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Automated Metric Reporting", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        }
+      ]
+    },
+    ml: {
+      title: "Machine Learning Engineer",
+      courseTitle: "Python Basics",
+      courseUrl: "courses.html?track=py&highlight=Python%20Basics",
+      doneCount: 4,
+      missingCount: 6,
+      readiness: "40%",
+      rows: [
+        {
+          cat: "Python & Math",
+          catColor: "var(--primary)",
+          catBg: "#f0efff",
+          rowspan: 4,
+          skills: [
+            { name: "Python Variables & Functions", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Object Oriented Python (OOP)", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Linear Algebra & Probability", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Matrix Operations with NumPy", have: false, badge: "Learn Next", badgeClass: "badge-pending" }
+          ]
+        },
+        {
+          cat: "ML Algorithms",
+          catColor: "var(--accent)",
+          catBg: "#fff3f0",
+          rowspan: 4,
+          skills: [
+            { name: "Linear & Logistic Regression", have: true, badge: "Done", badgeClass: "badge-done" },
+            { name: "Decision Trees & Random Forests", have: false, badge: "Learn Next", badgeClass: "badge-pending" },
+            { name: "Scikit-Learn Model Pipelines", have: false, badge: "Learn Next", badgeClass: "badge-pending" },
+            { name: "Hyperparameter Tuning & Cross-Val", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        },
+        {
+          cat: "Deep Learning & AI",
+          catColor: "var(--success)",
+          catBg: "#e8ffe8",
+          rowspan: 3,
+          skills: [
+            { name: "Feature Scaling & Normalization", have: false, badge: "Upcoming", badgeClass: "badge-locked" },
+            { name: "Neural Networks Fundamentals", have: false, badge: "Upcoming", badgeClass: "badge-locked" },
+            { name: "PyTorch / TensorFlow Model Deployment", have: false, badge: "Upcoming", badgeClass: "badge-locked" }
+          ]
+        }
+      ]
+    }
+  };
+
+  // ── Render Skill Gap Table with Rowspan & Colspan ──
+  function renderSkillTable(roleKey) {
+    var data = roleData[roleKey] || roleData.frontend;
+    var tbody = document.getElementById('skillTableBody');
+    tbody.innerHTML = '';
+
+    for (var c = 0; c < data.rows.length; c++) {
+      var catBlock = data.rows[c];
+      for (var s = 0; s < catBlock.skills.length; s++) {
+        var sk = catBlock.skills[s];
+        var tr = document.createElement('tr');
+
+        // First row of category contains the rowspan cell
+        if (s === 0) {
+          var tdCat = document.createElement('td');
+          tdCat.setAttribute('rowspan', catBlock.rowspan);
+          tdCat.style.background = catBlock.catBg;
+          tdCat.style.fontWeight = '700';
+          tdCat.style.color = catBlock.catColor;
+          tdCat.style.textAlign = 'center';
+          tdCat.textContent = catBlock.cat;
+          tr.appendChild(tdCat);
+        }
+
+        var tdName = document.createElement('td');
+        tdName.textContent = sk.name;
+        tr.appendChild(tdName);
+
+        var tdHave = document.createElement('td');
+        tdHave.className = sk.have ? 'gap-yes' : 'gap-no';
+        tdHave.textContent = sk.have ? '✅ Yes' : '❌ No';
+        tr.appendChild(tdHave);
+
+        var tdPriority = document.createElement('td');
+        var badge = document.createElement('span');
+        badge.className = 'badge ' + sk.badgeClass;
+        badge.textContent = sk.badge;
+        tdPriority.appendChild(badge);
+        tr.appendChild(tdPriority);
+
+        tbody.appendChild(tr);
+      }
+    }
+
+    // Update Counts & Progress Bar
+    document.getElementById('doneCount').textContent = data.doneCount;
+    document.getElementById('missingCount').textContent = data.missingCount;
+    document.getElementById('readinessPct').textContent = data.readiness;
+    document.getElementById('readinessBar').style.width = data.readiness;
+
+    // Update Headings & CTA
+    document.getElementById('skillGapHeading').textContent = 'Your Skill Gap — ' + data.title + ' Role';
+    document.getElementById('nextStepText').innerHTML = 'Start your recommended foundational course: <strong>' + data.courseTitle + '</strong>';
+    document.getElementById('btnNextCourseAction').href = data.courseUrl;
+    document.getElementById('btnNextCourseAction').textContent = 'Start ' + data.courseTitle + ' →';
+  }
+
+  // ── Change Role View ──
+  function changeRoleView(roleKey) {
+    var pills = document.querySelectorAll('.role-pill');
+    for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
+    var targetPill = document.getElementById('pill-' + roleKey);
+    if (targetPill) targetPill.classList.add('active');
+
+    renderSkillTable(roleKey);
+
+    // Highlight roadmap
+    highlightRoadmap(roleKey);
+  }
+
+  // ── Highlight Matching Roadmap ──
+  function highlightRoadmap(roleKey) {
+    var rms = document.querySelectorAll('.roadmap-container');
+    for (var i = 0; i < rms.length; i++) {
+      rms[i].classList.remove('highlighted');
+    }
+    var tags = document.querySelectorAll('.tag-match');
+    for (var j = 0; j < tags.length; j++) {
+      tags[j].style.display = 'none';
+    }
+
+    var targetRm = document.getElementById('rm-' + roleKey);
+    if (targetRm) {
+      targetRm.classList.add('highlighted');
+      var tag = document.getElementById('matchTag-' + roleKey);
+      if (tag) tag.style.display = 'inline-block';
+    }
+  }
+
+  // ── Tab Switching Function ──
+  function showTab(tabId, btn) {
+    var panes = document.querySelectorAll('.tab-pane');
+    for (var i = 0; i < panes.length; i++) panes[i].classList.remove('active');
+
+    var btns = document.querySelectorAll('.tab-btn');
+    for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ── Initialization: Check URL or LocalStorage Assessment Result ──
+  window.addEventListener('DOMContentLoaded', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var trackParam = urlParams.get('track');
+
+    var storedAssessment = localStorage.getItem('fitry_assessment');
+    var assessmentData = null;
+
+    if (storedAssessment) {
+      try {
+        assessmentData = JSON.parse(storedAssessment);
+      } catch(e) {
+        console.error(e);
+      }
+    }
+
+    // Determine initial track
+    var activeTrack = trackParam || (assessmentData ? assessmentData.trackKey : 'frontend');
+
+    // If assessment result exists, activate top dynamic banner
+    if (assessmentData || trackParam) {
+      var banner = document.getElementById('assessmentBanner');
+      banner.style.display = 'flex';
+
+      var displayTitle = assessmentData ? assessmentData.trackTitle : (roleData[activeTrack] ? roleData[activeTrack].title : "Frontend Developer");
+      var displayCourse = assessmentData ? assessmentData.recommendedCourse : (roleData[activeTrack] ? roleData[activeTrack].courseTitle : "HTML & CSS Fundamentals");
+      var courseTrack = assessmentData ? assessmentData.courseTrack : "web";
+
+      document.getElementById('bannerTitle').textContent = 'Recommended Career Path: ' + displayTitle + (assessmentData ? ' (' + assessmentData.matchScore + ')' : '');
+      document.getElementById('bannerCourseName').textContent = displayCourse;
+      document.getElementById('bannerCourseBtn').href = 'courses.html?track=' + courseTrack + '&highlight=' + encodeURIComponent(displayCourse);
+      document.getElementById('bannerCourseBtn').textContent = 'Start ' + displayCourse + ' →';
+
+      document.getElementById('roleSourceTag').style.display = 'inline-block';
+      document.getElementById('roleSourceTag').textContent = 'Assessed via Quiz';
+    }
+
+    changeRoleView(activeTrack);
+  });
+</script>
+</body>
+</html>

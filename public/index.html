@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitry - Career-First Learning Platform</title>
+
+  <!-- External CSS (from course: 3 ways to insert CSS) -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Internal CSS -->
+  <style>
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+    .how-it-works {
+      counter-reset: step-counter;
+    }
+    .how-step {
+      position: relative;
+      padding-left: 60px;
+      margin-bottom: 30px;
+    }
+    .how-step::before {
+      counter-increment: step-counter;
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: var(--primary);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation (semantic nav, ul list, active link) -->
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="career.html">Career Guide</a></li>
+    <li><a href="jobs.html">Jobs</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html">Register</a></li>
+  </ul>
+</nav>
+
+<!-- Marquee (from HTML course) -->
+<marquee behavior="scroll" direction="left"
+  style="background-color:#6c63ff; color:#fff; padding:8px; font-weight:600;">
+  🚀 Start your tech career today! &nbsp;&nbsp;|&nbsp;&nbsp;
+  Web Dev · Python · Data Analytics · Machine Learning &nbsp;&nbsp;|&nbsp;&nbsp;
+  100% Free to Learn · Earn Verified Certificates 🎓
+</marquee>
+
+<!-- Hero Section (semantic header) -->
+<header class="hero">
+  <h1>Your Tech Career Starts <span>Here</span></h1>
+  <p>Fitry is a career-first learning platform. Learn the right skills,
+     build real projects, and get genuinely job-ready.</p>
+  <a href="register.html" class="btn btn-primary">Get Started Free</a>
+  &nbsp;&nbsp;
+  <a href="courses.html" class="btn btn-secondary">Browse Courses</a>
+</header>
+
+<!-- Features Section -->
+<section id="features">
+  <h2 class="section-title">Why <span>Fitry</span>?</h2>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="feature-icon">🗺️</div>
+      <h3>Structured Roadmaps</h3>
+      <p>Follow clear, gated learning paths built for job seekers.</p>
+    </div>
+    <div class="card">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Career Assistant</h3>
+      <p>Get personalised guidance based on your actual progress.</p>
+    </div>
+    <div class="card">
+      <div class="feature-icon">🧩</div>
+      <h3>Coding Challenges</h3>
+      <p>Solve real problems, not just watch videos or tick boxes.</p>
+    </div>
+    <div class="card">
+      <div class="feature-icon">📊</div>
+      <h3>Skill Gap Analysis</h3>
+      <p>Know exactly what you're missing before applying for jobs.</p>
+    </div>
+    <div class="card">
+      <div class="feature-icon">💼</div>
+      <h3>Live Job Finder</h3>
+      <p>See which jobs you're ready for and which need more work.</p>
+    </div>
+    <div class="card">
+      <div class="feature-icon">🎓</div>
+      <h3>Verified Certificates</h3>
+      <p>Proof-of-work credentials, not just participation badges.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Tracks Section -->
+<section id="tracks" style="background-color:#fff;">
+  <h2 class="section-title">Learning <span>Tracks</span></h2>
+
+  <!-- Ordered List (from course) -->
+  <div style="max-width:700px; margin:0 auto;">
+    <p style="text-align:center; color:var(--muted); margin-bottom:24px;">
+      Choose a track that matches your career goal:
+    </p>
+    <ol class="styled-ol">
+      <li><strong>Web Development</strong> — HTML5, CSS3, JavaScript, Node.js</li>
+      <li><strong>Python Programming</strong> — Core Python, OOP, Libraries</li>
+      <li><strong>Data Analytics</strong> — SQL, Excel, Pandas, Visualisation</li>
+      <li><strong>Machine Learning</strong> — Algorithms, Sklearn, Projects</li>
+      <li><strong>UI/UX Design</strong> — Figma, Prototyping, User Research</li>
+    </ol>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section id="how">
+  <h2 class="section-title">How It <span>Works</span></h2>
+  <div style="max-width:650px; margin:0 auto;" class="how-it-works">
+    <div class="how-step">
+      <h3>Sign Up & Discover Your Path</h3>
+      <p>Take a quick assessment and Fitry suggests the best track for you.</p>
+    </div>
+    <div class="how-step">
+      <h3>Learn Through Structured Levels</h3>
+      <p>Beginner → Intermediate → Advanced. You unlock each level by passing the previous.</p>
+    </div>
+    <div class="how-step">
+      <h3>Complete Real Projects</h3>
+      <p>Build portfolio-ready projects with AI feedback at every step.</p>
+    </div>
+    <div class="how-step">
+      <h3>Apply for Jobs Confidently</h3>
+      <p>Use the Job Finder to see roles matched to your current skill level.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Embedded Video via iframe (from HTML course) -->
+<section id="video" style="background-color:#fff; text-align:center;">
+  <h2 class="section-title">See Fitry in <span>Action</span></h2>
+  <iframe
+    width="700" height="394"
+    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+    title="Fitry Platform Demo"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+    allowfullscreen
+    style="border-radius:12px; box-shadow:var(--shadow);">
+  </iframe>
+</section>
+
+<!-- Description List (from HTML Exp 3) -->
+<section id="glossary">
+  <h2 class="section-title">Quick <span>Glossary</span></h2>
+  <div style="max-width:600px; margin:0 auto;">
+    <dl>
+      <dt>Learning Track</dt>
+      <dd>A structured sequence of courses leading to a specific job role.</dd>
+      <dt>XP (Experience Points)</dt>
+      <dd>Points earned by completing lessons, quizzes, and projects.</dd>
+      <dt>Skill Gap</dt>
+      <dd>The missing skills between your current level and a target job role.</dd>
+      <dt>Gated Progression</dt>
+      <dd>You must pass each level to unlock the next one.</dd>
+      <dt>Verified Certificate</dt>
+      <dd>A certificate with a unique ID proving you completed all required work.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- Footer (semantic footer) -->
+<footer>
+  <p>Built by <strong>Kevin Gandhi (L015)</strong> &mdash; Website Designing &amp; Development, NMIMS 2026–27</p>
+  <p style="margin-top:8px;">
+    <a href="index.html">Home</a> &nbsp;|&nbsp;
+    <a href="courses.html">Courses</a> &nbsp;|&nbsp;
+    <a href="jobs.html">Jobs</a> &nbsp;|&nbsp;
+    <a href="register.html">Register</a>
+  </p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Fitry</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: linear-gradient(135deg,#1e1e2e,#2a2a4a); min-height:100vh; display:flex; flex-direction:column; }
+    .form-page { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="career.html">Career Guide</a></li>
+    <li><a href="jobs.html">Jobs</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html" class="active">Login</a></li>
+    <li><a href="register.html">Register</a></li>
+  </ul>
+</nav>
+
+<div class="form-page">
+  <div class="form-wrap" style="max-width:440px; width:100%;">
+    <h2>Welcome Back 👋</h2>
+    <p style="text-align:center;color:var(--muted);margin-bottom:24px;">
+      Login to continue your learning journey
+    </p>
+
+    <form id="loginForm" onsubmit="return validateLoginForm(event)">
+
+      <div class="form-group">
+        <label for="loginEmail">Email Address</label>
+        <input type="email" id="loginEmail" name="loginEmail" placeholder="you@example.com">
+        <span class="error-msg" id="err-loginEmail">Enter a valid email address.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" name="loginPass" placeholder="Your password">
+        <span class="error-msg" id="err-loginPass">Password is required (min 6 chars).</span>
+      </div>
+
+      <!-- Remember me checkbox -->
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="remember" name="remember">
+          Remember me
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+
+      <p style="text-align:center; margin-top:16px; font-size:0.9rem;">
+        Don't have an account? <a href="register.html">Register here</a>
+      </p>
+    </form>
+
+    <div id="loginSuccess" class="hidden" style="text-align:center; margin-top:20px;">
+      <h3 style="color:var(--success);">✅ Login Successful!</h3>
+      <p>Redirecting to your <strong>Career &amp; Course Assessment Quiz</strong>…</p>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<script src="js/validation.js"></script>
+<script>
+  function validateLoginForm(e) {
+    e.preventDefault();
+    var email = document.getElementById('loginEmail');
+    var pass  = document.getElementById('loginPass');
+    var ok = true;
+
+    // Email validation
+    var emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    toggleError('err-loginEmail', !emailRx.test(email.value.trim()));
+    if (!emailRx.test(email.value.trim())) { email.focus(); ok = false; }
+
+    // Password validation
+    if (pass.value.length < 6) {
+      toggleError('err-loginPass', true);
+      if (ok) pass.focus();
+      ok = false;
+    } else {
+      toggleError('err-loginPass', false);
+    }
+
+    if (ok) {
+      var userObj = {
+        email: email.value.trim(),
+        name: email.value.trim().split('@')[0],
+        loginTime: new Date().toISOString()
+      };
+      localStorage.setItem('fitry_user', JSON.stringify(userObj));
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('loginSuccess').classList.remove('hidden');
+      setTimeout(function() {
+        window.location.href = 'quiz.html?mode=assessment';
+      }, 1200);
+    }
+    return false;
+  }
+</script>
+</body>
+</html>

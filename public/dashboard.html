@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Fitry</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .dashboard-grid { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 30px; }
+    .main-col   { flex: 2; min-width: 300px; }
+    .side-col   { flex: 1; min-width: 250px; }
+    .lesson-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+    .lesson-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="career.html">Career Guide</a></li>
+    <li><a href="jobs.html">Jobs</a></li>
+    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+
+<section style="padding:40px;">
+
+  <!-- DYNAMIC ASSESSMENT & GOAL BANNER -->
+  <div id="dashAssessmentBanner" class="guide-assessment-banner" style="display:none; margin-bottom:28px;">
+    <div>
+      <span class="banner-pill" id="dashBannerBadge">🎯 Active Assessed Career Goal</span>
+      <h3 id="dashBannerTitle">Target Role: Frontend Web Developer</h3>
+      <p id="dashBannerDesc">Current Focus: <strong>HTML &amp; CSS Fundamentals</strong></p>
+    </div>
+    <div class="banner-cta">
+      <a href="career.html" class="btn btn-primary" style="background:var(--accent); border-color:var(--accent);">
+        View Career Guide →
+      </a>
+      <a href="quiz.html?mode=assessment" class="btn btn-secondary">
+        Retake Quiz
+      </a>
+    </div>
+  </div>
+
+  <h2 class="section-title">Your <span>Dashboard</span></h2>
+
+  <!-- Stats Row — DOM updated by JS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-value" id="xpDisplay">350</div>
+      <div class="stat-label">Total XP</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="streakDisplay">7</div>
+      <div class="stat-label">Day Streak 🔥</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="coursesDisplay">3</div>
+      <div class="stat-label">Courses Done</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="rankDisplay">#12</div>
+      <div class="stat-label">Leaderboard Rank</div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+
+    <!-- Main Column -->
+    <div class="main-col">
+
+      <!-- XP Progress Bar -->
+      <div style="background:var(--white); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:24px;">
+        <h3>XP Progress to Next Level</h3>
+        <p style="color:var(--muted); font-size:0.9rem;">Level 4 — <span id="xpLabel">350 / 500 XP</span></p>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar" id="xpBar" style="width:70%;"></div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="addXP(10)">+10 XP (Complete Lesson)</button>
+          <button class="btn btn-secondary" onclick="addXP(25)">+25 XP (Submit Project)</button>
+          <button class="btn btn-danger" onclick="resetXP()">Reset XP</button>
+        </div>
+      </div>
+
+      <!-- Course Progress Table with ROWSPAN & COLSPAN -->
+      <div style="background:var(--white); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
+        <h3 style="margin-bottom:16px;">Course Progress</h3>
+
+        <!-- TABLE with rowspan and colspan (rubric requirement #3) -->
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2">Track</th>          <!-- rowspan: spans 2 rows -->
+              <th colspan="3">Level Progress</th> <!-- colspan: spans 3 cols -->
+              <th rowspan="2">Status</th>
+            </tr>
+            <tr>
+              <th>Beginner</th>
+              <th>Intermediate</th>
+              <th>Advanced</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Web Development</strong></td>
+              <td><span class="badge badge-done">✅ Done</span></td>
+              <td><span class="badge badge-done">✅ Done</span></td>
+              <td><span class="badge badge-pending">⏳ In Progress</span></td>
+              <td style="background:#fff3cd;">Active</td> <!-- inline CSS on one cell -->
+            </tr>
+            <tr>
+              <td><strong>Python</strong></td>
+              <td><span class="badge badge-done">✅ Done</span></td>
+              <td><span class="badge badge-pending">⏳ In Progress</span></td>
+              <td><span class="badge badge-locked">🔒 Locked</span></td>
+              <td>Active</td>
+            </tr>
+            <tr>
+              <td><strong>Data Analytics</strong></td>
+              <td><span class="badge badge-pending">⏳ In Progress</span></td>
+              <td><span class="badge badge-locked">🔒 Locked</span></td>
+              <td><span class="badge badge-locked">🔒 Locked</span></td>
+              <td>Active</td>
+            </tr>
+            <tr>
+              <td><strong>Machine Learning</strong></td>
+              <td colspan="3" style="text-align:center; color:var(--muted); font-style:italic;">
+                Unlock after completing Python track
+              </td>
+              <td><span class="badge badge-locked">🔒 Locked</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Today's Lessons -->
+      <div style="background:var(--white); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-top:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3>Today's Lessons</h3>
+          <span class="badge badge-done" id="trackLessonBadge">Personalized Track</span>
+        </div>
+        <div id="lessonList">
+          <div class="lesson-item">
+            <span>📘 CSS Flexbox Basics</span>
+            <button class="btn btn-success" style="padding:6px 16px; font-size:0.85rem;" onclick="markDone(this, 15)">Mark Done (+15 XP)</button>
+          </div>
+          <div class="lesson-item">
+            <span>📗 JavaScript DOM Events</span>
+            <button class="btn btn-success" style="padding:6px 16px; font-size:0.85rem;" onclick="markDone(this, 20)">Mark Done (+20 XP)</button>
+          </div>
+          <div class="lesson-item">
+            <span>📙 Node.js Express Routes</span>
+            <button class="btn btn-success" style="padding:6px 16px; font-size:0.85rem;" onclick="markDone(this, 25)">Mark Done (+25 XP)</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main-col -->
+
+    <!-- Side Column -->
+    <div class="side-col">
+
+      <!-- Profile Card (from CSS Exp 4) -->
+      <div class="profile-card mb-20">
+        <img src="https://api.dicebear.com/7.x/initials/svg?seed=Kevin&backgroundColor=6c63ff"
+             alt="Profile Picture">
+        <h3 id="profileName">Kevin Gandhi</h3>
+        <p id="profileTrack">Web Developer Track</p>
+        <p style="color:var(--primary); font-weight:600; margin-top:8px;">Level 4 Learner</p>
+        <a href="career.html" class="btn btn-secondary" style="margin-top:12px; display:block; font-size:0.85rem;">View Career Guide</a>
+        <a href="quiz.html?mode=assessment" class="btn btn-secondary" style="margin-top:8px; display:block; font-size:0.85rem;">Retake Assessment</a>
+        <a href="certificate.html" class="btn btn-primary" style="margin-top:8px; display:block; font-size:0.85rem;">View Certificate</a>
+      </div>
+
+      <!-- Today's Date using JS Date object -->
+      <div style="background:var(--white); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-top:20px;">
+        <h4>📅 Today</h4>
+        <p id="todayDate" style="color:var(--muted); font-size:0.9rem;"></p>
+        <p id="todaySeason" style="color:var(--primary); font-weight:600; margin-top:6px;"></p>
+        <p style="font-size:0.85rem; color:var(--muted); margin-top:8px;">Day streak resets at midnight!</p>
+      </div>
+
+      <!-- Weekly Leaderboard (unordered list) -->
+      <div style="background:var(--white); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-top:20px;">
+        <h4>🏆 Weekly Leaderboard</h4>
+        <ul class="styled-ul" style="margin-top:12px; list-style-type:none; padding:0;">
+          <li style="padding:8px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+            <span>🥇 Priya S.</span><span style="color:var(--primary);">820 XP</span>
+          </li>
+          <li style="padding:8px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+            <span>🥈 Arjun M.</span><span style="color:var(--primary);">790 XP</span>
+          </li>
+          <li style="padding:8px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; background:#f0efff;">
+            <span><strong>🎯 You</strong></span><span style="color:var(--primary);"><strong>350 XP</strong></span>
+          </li>
+          <li style="padding:8px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+            <span>Riya K.</span><span style="color:var(--muted);">310 XP</span>
+          </li>
+          <li style="padding:8px 0; display:flex; justify-content:space-between;">
+            <span>Dev P.</span><span style="color:var(--muted);">280 XP</span>
+          </li>
+        </ul>
+      </div>
+
+    </div><!-- /side-col -->
+  </div>
+</section>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>

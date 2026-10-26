@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Finder - Fitry</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .search-bar { display:flex; gap:12px; max-width:600px; margin:0 auto 30px; }
+    .search-bar input { flex:1; padding:12px 20px; border:2px solid #e0e0e0; border-radius:var(--radius); font-size:1rem; outline:none; transition:var(--transition); }
+    .search-bar input:focus { border-color:var(--primary); }
+    .job-skills  { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .job-meta    { font-size:0.85rem; color:var(--muted); margin-top:4px; }
+    .readiness   { font-size:0.85rem; padding:4px 12px; border-radius:20px; }
+    .ready       { background:#d4edda; color:#155724; }
+    .almost      { background:#fff3cd; color:#856404; }
+    .not-ready   { background:#f8d7da; color:#721c24; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="career.html">Career Guide</a></li>
+    <li><a href="jobs.html" class="active">Jobs</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+
+<section>
+  <h2 class="section-title">Job <span>Finder</span></h2>
+  <p style="text-align:center; color:var(--muted); margin-bottom:24px;">
+    Real job listings — matched against your current skill level.
+  </p>
+
+  <!-- Search bar -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search jobs by title or skill…"
+      oninput="filterJobs()" onkeyup="filterJobs()">
+    <button class="btn btn-primary" onclick="filterJobs()">Search</button>
+  </div>
+
+  <!-- Filter buttons -->
+  <div class="filter-btns">
+    <button class="filter-btn active" onclick="setCategory('all',      this)">All</button>
+    <button class="filter-btn"        onclick="setCategory('frontend', this)">Frontend</button>
+    <button class="filter-btn"        onclick="setCategory('backend',  this)">Backend</button>
+    <button class="filter-btn"        onclick="setCategory('data',     this)">Data</button>
+    <button class="filter-btn"        onclick="setCategory('design',   this)">Design</button>
+  </div>
+
+  <!-- Job count -->
+  <p style="color:var(--muted); margin-bottom:16px;" id="jobCount"></p>
+
+  <!-- Job listings rendered by JS -->
+  <div id="jobsContainer"></div>
+
+  <p id="noJobsMsg" style="text-align:center; color:var(--muted); display:none; margin-top:24px;">
+    No jobs found. Try a different search or filter.
+  </p>
+</section>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<script src="js/jobs.js"></script>
+</body>
+</html>

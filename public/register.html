@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Fitry</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Internal CSS -->
+  <style>
+    body { background: linear-gradient(135deg, #1e1e2e 0%, #2a2a4a 100%); min-height: 100vh; display: flex; flex-direction: column; }
+    .form-page { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .password-rules { font-size: 0.8rem; color: var(--muted); margin-top: 6px; line-height: 1.7; }
+    .strength-bar-wrap { height: 6px; background: #e0e0e0; border-radius: 4px; margin-top: 8px; }
+    .strength-bar { height: 100%; border-radius: 4px; width: 0; transition: all 0.3s ease; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Fit<span>ry</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="career.html">Career Guide</a></li>
+    <li><a href="jobs.html">Jobs</a></li>
+    <li><a href="quiz.html">Quiz &amp; Assessment</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html" class="active">Register</a></li>
+  </ul>
+</nav>
+
+<div class="form-page">
+  <div class="form-wrap" style="max-width:560px; width:100%;">
+    <h2>Create Your Account</h2>
+    <p style="text-align:center; color:var(--muted); margin-bottom:24px;">
+      Start your tech career journey for free
+    </p>
+
+    <!-- Form: uses all input types taught in course -->
+    <form id="registerForm" novalidate onsubmit="return validateRegisterForm(event)">
+
+      <!-- Full Name — letters only -->
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="e.g. Kevin Gandhi">
+        <span class="error-msg" id="err-fullname">Name must contain letters only (min 3 chars).</span>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com">
+        <span class="error-msg" id="err-email">Enter a valid email address.</span>
+      </div>
+
+      <!-- Phone — 10 digits -->
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" name="phone" placeholder="10-digit mobile number" maxlength="10">
+        <span class="error-msg" id="err-phone">Enter a valid 10-digit phone number.</span>
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob">
+        <span class="error-msg" id="err-dob">Please select your date of birth.</span>
+      </div>
+
+      <!-- Track — select dropdown -->
+      <div class="form-group">
+        <label for="track">Choose Learning Track</label>
+        <select id="track" name="track">
+          <option value="">-- Select a track --</option>
+          <option value="web">Web Development</option>
+          <option value="python">Python Programming</option>
+          <option value="data">Data Analytics</option>
+          <option value="ml">Machine Learning</option>
+          <option value="uiux">UI/UX Design</option>
+        </select>
+        <span class="error-msg" id="err-track">Please select a learning track.</span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <!-- Inline CSS on input to show border-radius difference -->
+        <input type="password" id="password" name="password"
+          placeholder="Min 8 chars" style="border-radius:8px;">
+        <div class="strength-bar-wrap"><div class="strength-bar" id="strengthBar"></div></div>
+        <div class="password-rules">
+          Must contain: uppercase · lowercase · number · special character (@$!%*?&)
+        </div>
+        <span class="error-msg" id="err-password">Password does not meet requirements.</span>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPass">Confirm Password</label>
+        <input type="password" id="confirmPass" name="confirmPass" placeholder="Re-enter password">
+        <span class="error-msg" id="err-confirmPass">Passwords do not match.</span>
+      </div>
+
+      <!-- Gender — radio buttons -->
+      <div class="form-group">
+        <label>Gender</label>
+        <label style="margin-right:16px;">
+          <input type="radio" name="gender" value="male"> Male
+        </label>
+        <label style="margin-right:16px;">
+          <input type="radio" name="gender" value="female"> Female
+        </label>
+        <label>
+          <input type="radio" name="gender" value="other"> Other
+        </label>
+        <span class="error-msg" id="err-gender">Please select your gender.</span>
+      </div>
+
+      <!-- Interests — checkboxes -->
+      <div class="form-group">
+        <label>Interests (check all that apply)</label>
+        <label style="display:block; margin:4px 0;">
+          <input type="checkbox" name="interests" value="webdev"> Web Development
+        </label>
+        <label style="display:block; margin:4px 0;">
+          <input type="checkbox" name="interests" value="dsai"> Data Science / AI
+        </label>
+        <label style="display:block; margin:4px 0;">
+          <input type="checkbox" name="interests" value="mobile"> Mobile Development
+        </label>
+      </div>
+
+      <!-- Newsletter checkbox — enables/disables frequency select -->
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="newsletter" name="newsletter" onclick="toggleFrequency(this)">
+          Subscribe to newsletter
+        </label>
+      </div>
+
+      <div class="form-group" id="freqGroup" style="display:none;">
+        <label for="frequency">Email frequency</label>
+        <select id="frequency" name="frequency">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+
+      <!-- Terms checkbox -->
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="terms" name="terms">
+          I agree to the <a href="#">Terms &amp; Conditions</a>
+        </label>
+        <span class="error-msg" id="err-terms">You must agree to the terms.</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+
+      <p style="text-align:center; margin-top:16px; font-size:0.9rem;">
+        Already have an account? <a href="login.html">Login here</a>
+      </p>
+    </form>
+
+    <!-- Success message (hidden by default) -->
+    <div id="successMsg" class="hidden" style="text-align:center; margin-top:20px;">
+      <h3 style="color:var(--success);">✅ Registration Successful!</h3>
+      <p>Welcome to Fitry! Redirecting to your <strong>Career &amp; Course Assessment Quiz</strong>… <br>
+      <a href="quiz.html?mode=assessment" class="btn btn-primary" style="margin-top:10px; display:inline-block;">Start Assessment Now →</a></p>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 Fitry Lite · Built by Kevin Gandhi (L015)</p></footer>
+
+<!-- JS file for validation -->
+<script src="js/validation.js"></script>
+<script>
+  // Password strength indicator (inline script — teaches DOM events)
+  document.getElementById('password').addEventListener('input', function() {
+    var val = this.value;
+    var bar = document.getElementById('strengthBar');
+    var score = 0;
+    if (val.length >= 8)          score++;
+    if (/[A-Z]/.test(val))        score++;
+    if (/[a-z]/.test(val))        score++;
+    if (/[0-9]/.test(val))        score++;
+    if (/[@$!%*?&]/.test(val))    score++;
+
+    var widths  = ['0%','20%','40%','65%','85%','100%'];
+    var colors  = ['#ccc','#dc3545','#fd7e14','#ffc107','#28a745','#20c997'];
+    bar.style.width            = widths[score];
+    bar.style.backgroundColor  = colors[score];
+  });
+
+  // Enable/disable frequency dropdown based on newsletter checkbox
+  function toggleFrequency(chk) {
+    document.getElementById('freqGroup').style.display = chk.checked ? 'block' : 'none';
+    document.getElementById('frequency').disabled      = !chk.checked;
+  }
+</script>
+</body>
+</html>
